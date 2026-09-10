@@ -1,5 +1,7 @@
 import tkinter as tk
 import random
+
+prinr('test')
  
 # ============================================================
 # QUIZ + PIXEL MAZE GAME
