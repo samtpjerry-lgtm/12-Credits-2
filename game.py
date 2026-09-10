@@ -8,19 +8,25 @@ class QuizGame:
     def __init__(self, root):
         self.root = root
 
+        # ====================================================
         # WINDOW SETTINGS
+        # ====================================================
 
         self.root.title("Quiz Game")
         self.root.geometry("900x700")
         self.root.configure(bg="#111111")
         self.root.resizable(False, False)
 
+        # ====================================================
         # GAME VARIABLES
+        # ====================================================
 
         self.score = 0
         self.question_number = 0
 
+        # ====================================================
         # QUESTIONS
+        # ====================================================
 
         self.questions = [
             {
@@ -151,8 +157,60 @@ class QuizGame:
             }
         ]
 
+        # Show the first question
+        self.show_quiz()
 
-# Starts the game
+
+    # ========================================================
+    # SHOW QUIZ
+    # ========================================================
+
+    def show_quiz(self):
+
+        # Clear anything currently on the screen
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        # Get the current question
+        question = self.questions[self.question_number]
+
+        # Game title
+        title = tk.Label(
+            self.root,
+            text="⚡ QUIZ GAME ⚡",
+            font=("Courier New", 32, "bold"),
+            fg="#00ffff",
+            bg="#111111"
+        )
+        title.pack(pady=25)
+
+        # Question number and score
+        status = tk.Label(
+            self.root,
+            text=f"Question {self.question_number + 1}/{len(self.questions)}"
+                 f"     Score: {self.score}",
+            font=("Courier New", 15),
+            fg="white",
+            bg="#111111"
+        )
+        status.pack()
+
+        # Question
+        question_label = tk.Label(
+            self.root,
+            text=question["question"],
+            font=("Courier New", 19, "bold"),
+            fg="white",
+            bg="#111111",
+            wraplength=780,
+            justify="center"
+        )
+        question_label.pack(pady=50)
+
+
+# ============================================================
+# START GAME
+# ============================================================
 
 if __name__ == "__main__":
     root = tk.Tk()
