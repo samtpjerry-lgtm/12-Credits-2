@@ -216,3 +216,19 @@ if __name__ == "__main__":
     root = tk.Tk()
     game = QuizGame(root)
     root.mainloop()
+
+# Answer buttons
+        for answer in question["answers"]:
+            button = tk.Button(
+                self.root,
+                text=answer,
+                font=("Courier New", 16, "bold"),
+                fg="white",
+                bg="#222222",
+                activebackground="#00ffff",
+                activeforeground="black",
+                width=25,
+                height=2,
+                command=lambda selected=answer: self.check_answer(selected)
+            )
+            button.pack(pady=8)
