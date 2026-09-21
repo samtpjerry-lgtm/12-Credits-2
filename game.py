@@ -232,3 +232,5 @@ if __name__ == "__main__":
                 command=lambda selected=answer: self.check_answer(selected)
             )
             button.pack(pady=8)
+
+            #Currently not working
