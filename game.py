@@ -2,8 +2,6 @@ import tkinter as tk
 import random
 
 
-# Gives the game a title and sets the colour and dimensions of the game
-
 class QuizGame:
     def __init__(self, root):
         self.root = root
@@ -157,9 +155,8 @@ class QuizGame:
             }
         ]
 
-        # Show the first question
+        # Show first question
         self.show_quiz()
-
 
     # ========================================================
     # SHOW QUIZ
@@ -167,11 +164,11 @@ class QuizGame:
 
     def show_quiz(self):
 
-        # Clear anything currently on the screen
+        # Clear the screen
         for widget in self.root.winfo_children():
             widget.destroy()
 
-        # Get the current question
+        # Get current question
         question = self.questions[self.question_number]
 
         # Game title
@@ -205,20 +202,16 @@ class QuizGame:
             wraplength=780,
             justify="center"
         )
-        question_label.pack(pady=50)
+        question_label.pack(pady=40)
 
+        # ====================================================
+        # ANSWER BUTTONS
+        # ====================================================
 
-# ============================================================
-# START GAME
-# ============================================================
+        answers = question["answers"].copy()
+        random.shuffle(answers)
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    game = QuizGame(root)
-    root.mainloop()
-
-# Answer buttons
-        for answer in question["answers"]:
+        for answer in answers:
             button = tk.Button(
                 self.root,
                 text=answer,
@@ -233,4 +226,104 @@ if __name__ == "__main__":
             )
             button.pack(pady=8)
 
-            #Currently not working
+    # ========================================================
+    # CHECK ANSWER
+    # ========================================================
+
+    def check_answer(self, selected_answer):
+
+        question = self.questions[self.question_number]
+
+        # Check if answer is correct
+        if selected_answer == question["correct"]:
+            self.score += 1
+
+        # Move to next question
+        self.question_number += 1
+
+        # Show next question or results
+        if self.question_number < len(self.questions):
+            self.show_quiz()
+        else:
+            self.show_results()
+
+    # ========================================================
+    # SHOW RESULTS
+    # ========================================================
+
+    def show_results(self):
+
+        # Clear screen
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        # Results title
+        title = tk.Label(
+            self.root,
+            text="⚡ QUIZ COMPLETE ⚡",
+            font=("Courier New", 32, "bold"),
+            fg="#00ffff",
+            bg="#111111"
+        )
+        title.pack(pady=80)
+
+        # Score
+        score_label = tk.Label(
+            self.root,
+            text=f"You scored {self.score}/{len(self.questions)}",
+            font=("Courier New", 24, "bold"),
+            fg="white",
+            bg="#111111"
+        )
+        score_label.pack(pady=20)
+
+        # Restart button
+        restart_button = tk.Button(
+            self.root,
+            text="PLAY AGAIN",
+            font=("Courier New", 16, "bold"),
+            fg="white",
+            bg="#222222",
+            activebackground="#00ffff",
+            activeforeground="black",
+            width=20,
+            height=2,
+            command=self.restart_game
+        )
+        restart_button.pack(pady=30)
+
+        # Quit button
+        quit_button = tk.Button(
+            self.root,
+            text="QUIT",
+            font=("Courier New", 16, "bold"),
+            fg="white",
+            bg="#222222",
+            activebackground="#00ffff",
+            activeforeground="black",
+            width=20,
+            height=2,
+            command=self.root.destroy
+        )
+        quit_button.pack(pady=10)
+
+    # ========================================================
+    # RESTART GAME
+    # ========================================================
+
+    def restart_game(self):
+
+        self.score = 0
+        self.question_number = 0
+
+        self.show_quiz()
+
+
+# ============================================================
+# START GAME
+# ============================================================
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    game = QuizGame(root)
+    root.mainloop()
