@@ -2,6 +2,7 @@ import tkinter as tk
 import random
 import winsound
 import threading
+from collections import deque
 
 
 class QuizGame:
@@ -43,7 +44,7 @@ class QuizGame:
         # Monster
         self.monster_x = 0
         self.monster_y = 0
-        self.monster_job = None          # for cancelling the chase timer
+        self.monster_job = None
 
         # ====================================================
         # QUESTIONS
@@ -349,7 +350,6 @@ class QuizGame:
         my = self.monster_y * self.cell_size
         self.canvas.create_rectangle(mx + 3, my + 3, mx + self.cell_size - 3, my + self.cell_size - 3,
                                      fill="#110000", outline="#660000", width=2)
-        # Glowing red eyes
         self.canvas.create_rectangle(mx + 8, my + 8, mx + 13, my + 13, fill="#ff0000", outline="")
         self.canvas.create_rectangle(mx + 17, my + 8, mx + 22, my + 13, fill="#ff0000", outline="")
 
@@ -368,11 +368,9 @@ class QuizGame:
         self.player_y = 1
         self.maze = self.generate_maze()
 
-        # Place monster far from the player (near the opposite corner)
+        # Place monster far away
         self.monster_x = self.maze_width - 3
         self.monster_y = self.maze_height - 3
-
-        # Make sure monster is on an open cell
         while self.maze[self.monster_y][self.monster_x] == 1:
             self.monster_x = random.randint(2, self.maze_width - 3)
             self.monster_y = random.randint(2, self.maze_height - 3)
@@ -388,7 +386,7 @@ class QuizGame:
 
         instructions = tk.Label(
             self.root,
-            text="W A S D or ARROWS • Something is hunting you...",
+            text="W A S D or ARROWS • It knows the way to you...",
             font=("Courier New", 12),
             fg="#aa4444",
             bg="#050505"
@@ -408,58 +406,76 @@ class QuizGame:
         self.root.bind("<KeyPress>", self.move_player)
         self.root.focus_set()
 
-        # Start the monster chase
         self.schedule_monster()
 
     # ========================================================
-    # MONSTER AI
+    # SMART MONSTER (BFS PATHFINDING)
     # ========================================================
 
+    def find_next_step(self):
+        """Use BFS to find the next step toward the player"""
+        start = (self.monster_x, self.monster_y)
+        goal = (self.player_x, self.player_y)
+
+        if start == goal:
+            return start
+
+        queue = deque([start])
+        came_from = {start: None}
+        visited = {start}
+
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+
+        while queue:
+            current = queue.popleft()
+
+            if current == goal:
+                break
+
+            cx, cy = current
+            for dx, dy in directions:
+                nx, ny = cx + dx, cy + dy
+                if (0 <= nx < self.maze_width and 0 <= ny < self.maze_height and
+                        self.maze[ny][nx] == 0 and (nx, ny) not in visited):
+                    visited.add((nx, ny))
+                    came_from[(nx, ny)] = current
+                    queue.append((nx, ny))
+
+        # Reconstruct path
+        if goal not in came_from:
+            return start  # no path found
+
+        # Walk back from goal to find the first step
+        path = []
+        current = goal
+        while current != start:
+            path.append(current)
+            current = came_from[current]
+            if current is None:
+                break
+
+        if path:
+            return path[-1]  # the next step from monster
+        return start
+
     def schedule_monster(self):
-        # Speed increases every time you enter the maze
-        # Level 1 = slower, higher levels = much faster
-        delay = max(180, 700 - (self.maze_level * 90))
+        # Gets faster every maze level
+        delay = max(160, 650 - (self.maze_level * 85))
         self.monster_job = self.root.after(delay, self.move_monster)
 
     def move_monster(self):
         if self.monster_job is None:
             return
 
-        # Simple chase: move one step closer to the player
-        dx = 0
-        dy = 0
-
-        if self.monster_x < self.player_x:
-            dx = 1
-        elif self.monster_x > self.player_x:
-            dx = -1
-
-        if self.monster_y < self.player_y:
-            dy = 1
-        elif self.monster_y > self.player_y:
-            dy = -1
-
-        # Prefer moving in the direction that reduces distance more
-        # Try horizontal first, then vertical
-        new_x = self.monster_x + dx
-        new_y = self.monster_y
-
-        if not (0 <= new_x < self.maze_width and self.maze[new_y][new_x] == 0):
-            new_x = self.monster_x
-            new_y = self.monster_y + dy
-
-        if 0 <= new_x < self.maze_width and 0 <= new_y < self.maze_height and self.maze[new_y][new_x] == 0:
-            self.monster_x = new_x
-            self.monster_y = new_y
+        next_pos = self.find_next_step()
+        self.monster_x, self.monster_y = next_pos
 
         self.draw_maze()
 
-        # Check if monster caught the player
         if self.monster_x == self.player_x and self.monster_y == self.player_y:
             self.caught_by_monster()
             return
 
-        # Continue chasing
         self.schedule_monster()
 
     def stop_monster(self):
@@ -493,7 +509,6 @@ class QuizGame:
         )
         text.pack(pady=20)
 
-        # Send them straight back into the maze
         self.root.after(2200, self.start_maze)
 
     # ========================================================
@@ -527,7 +542,6 @@ class QuizGame:
         self.player_y = new_y
         self.draw_maze()
 
-        # Check collision after player moves
         if self.monster_x == self.player_x and self.monster_y == self.player_y:
             self.caught_by_monster()
             return
