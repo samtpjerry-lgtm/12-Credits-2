@@ -492,6 +492,43 @@ class QuizGame:
         # Draw the maze
         self.draw_maze()
 
+    # ========================================================
+    # MOVE PLAYER  (Step 5)
+    # ========================================================
+
+    def move_player(self, event):
+        key = event.keysym.lower()
+
+        dx = 0
+        dy = 0
+
+        if key in ("up", "w"):
+            dy = -1
+        elif key in ("down", "s"):
+            dy = 1
+        elif key in ("left", "a"):
+            dx = -1
+        elif key in ("right", "d"):
+            dx = 1
+        else:
+            return
+
+        new_x = self.player_x + dx
+        new_y = self.player_y + dy
+
+        # Stay inside the maze
+        if not (0 <= new_x < self.maze_width and 0 <= new_y < self.maze_height):
+            return
+
+        # Hit a wall?
+        if self.maze[new_y][new_x] == 1:
+            return
+
+        # Move the player
+        self.player_x = new_x
+        self.player_y = new_y
+        self.draw_maze()
+
 
 # ============================================================
 # START GAME
