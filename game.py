@@ -332,6 +332,45 @@ class QuizGame:
 
         self.show_quiz()
 
+    # ========================================================
+    # MAZE GENERATION  (Step 2)
+    # ========================================================
+
+    def generate_maze(self):
+        # Start with all walls
+        maze = [
+            [1 for _ in range(self.maze_width)]
+            for _ in range(self.maze_height)
+        ]
+
+        # Recursive backtracking to carve paths
+        def carve(x, y):
+            maze[y][x] = 0
+
+            directions = [(2, 0), (-2, 0), (0, 2), (0, -2)]
+            random.shuffle(directions)
+
+            for dx, dy in directions:
+                nx = x + dx
+                ny = y + dy
+
+                if (
+                    1 <= nx < self.maze_width - 1
+                    and 1 <= ny < self.maze_height - 1
+                    and maze[ny][nx] == 1
+                ):
+                    maze[y + dy // 2][x + dx // 2] = 0
+                    carve(nx, ny)
+
+        carve(1, 1)
+
+        # Make sure the exit area is open
+        maze[self.exit_y][self.exit_x] = 0
+        maze[self.exit_y - 1][self.exit_x] = 0
+        maze[self.exit_y][self.exit_x - 1] = 0
+
+        return maze
+
 
 # ============================================================
 # START GAME
