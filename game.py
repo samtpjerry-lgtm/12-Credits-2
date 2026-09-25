@@ -243,7 +243,7 @@ class QuizGame:
             button.pack(pady=8)
 
     # ========================================================
-    # CHECK ANSWER
+    # CHECK ANSWER  (Updated in Step 7)
     # ========================================================
 
     def check_answer(self, selected_answer):
@@ -252,13 +252,52 @@ class QuizGame:
 
         if selected_answer == question["correct"]:
             self.score += 1
+            self.question_number += 1
 
-        self.question_number += 1
-
-        if self.question_number < len(self.questions):
-            self.show_quiz()
+            if self.question_number < len(self.questions):
+                self.show_quiz()
+            else:
+                self.show_results()
         else:
-            self.show_results()
+            # Wrong answer → send player into the maze
+            self.show_wrong()
+
+    # ========================================================
+    # SHOW WRONG  (Step 7)
+    # ========================================================
+
+    def show_wrong(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        label = tk.Label(
+            self.root,
+            text="✗ WRONG!",
+            font=("Courier New", 40, "bold"),
+            fg="#ff2222",
+            bg="#111111"
+        )
+        label.pack(pady=60)
+
+        message = tk.Label(
+            self.root,
+            text="THE MAZE HAS CLAIMED YOU...",
+            font=("Courier New", 20, "bold"),
+            fg="#ff5555",
+            bg="#111111"
+        )
+        message.pack()
+
+        message2 = tk.Label(
+            self.root,
+            text="Escape the maze to continue the quiz!",
+            font=("Courier New", 16),
+            fg="white",
+            bg="#111111"
+        )
+        message2.pack(pady=20)
+
+        self.root.after(1500, self.start_maze)
 
     # ========================================================
     # SHOW RESULTS
