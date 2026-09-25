@@ -1,8 +1,14 @@
 import tkinter as tk
 import random
-import winsound
 import threading
 from collections import deque
+
+# Try to import winsound (only works on Windows)
+try:
+    import winsound
+    HAS_SOUND = True
+except ImportError:
+    HAS_SOUND = False
 
 
 class QuizGame:
@@ -12,7 +18,6 @@ class QuizGame:
         # ====================================================
         # WINDOW SETTINGS
         # ====================================================
-
         self.root.title("The Quiz That Should Not Be")
         self.root.geometry("900x700")
         self.root.configure(bg="#050505")
@@ -21,14 +26,12 @@ class QuizGame:
         # ====================================================
         # GAME VARIABLES
         # ====================================================
-
         self.score = 0
         self.question_number = 0
 
         # ====================================================
         # MAZE VARIABLES
         # ====================================================
-
         self.maze_level = 0
         self.canvas_size = 600
         self.cell_size = 30
@@ -49,7 +52,6 @@ class QuizGame:
         # ====================================================
         # QUESTIONS
         # ====================================================
-
         self.questions = [
             {"question": "What is 2 + 2?", "answers": ["3", "4", "5", "6"], "correct": "4"},
             {"question": "What planet do we live on?", "answers": ["Mars", "Earth", "Venus", "Jupiter"], "correct": "Earth"},
@@ -76,10 +78,12 @@ class QuizGame:
         self.show_quiz()
 
     # ========================================================
-    # SOUND EFFECTS
+    # SOUND EFFECTS (safe version)
     # ========================================================
 
     def play_sound(self, frequency, duration):
+        if not HAS_SOUND:
+            return
         def _play():
             try:
                 winsound.Beep(frequency, duration)
@@ -306,14 +310,13 @@ class QuizGame:
 
         carve(1, 1)
 
-        # Make sure exit is open
+        # Open the exit area
         maze[self.exit_y][self.exit_x] = 0
         maze[self.exit_y - 1][self.exit_x] = 0
         maze[self.exit_y][self.exit_x - 1] = 0
 
         # Add extra paths so there are multiple routes
-        extra_paths = 18
-        for _ in range(extra_paths):
+        for _ in range(18):
             x = random.randint(1, self.maze_width - 2)
             y = random.randint(1, self.maze_height - 2)
             if maze[y][x] == 1:
@@ -420,11 +423,10 @@ class QuizGame:
         self.schedule_monster()
 
     # ========================================================
-    # SMART MONSTER (BFS PATHFINDING)
+    # SMART MONSTER (BFS)
     # ========================================================
 
     def find_next_step(self):
-        """Use BFS to find the next step toward the player"""
         start = (self.monster_x, self.monster_y)
         goal = (self.player_x, self.player_y)
 
@@ -439,7 +441,6 @@ class QuizGame:
 
         while queue:
             current = queue.popleft()
-
             if current == goal:
                 break
 
@@ -455,7 +456,7 @@ class QuizGame:
         if goal not in came_from:
             return start
 
-        # Reconstruct path and return the next step
+        # Reconstruct path
         path = []
         current = goal
         while current != start:
@@ -469,7 +470,6 @@ class QuizGame:
         return start
 
     def schedule_monster(self):
-        # Gets faster every maze level
         delay = max(160, 650 - (self.maze_level * 85))
         self.monster_job = self.root.after(delay, self.move_monster)
 
@@ -479,7 +479,6 @@ class QuizGame:
 
         next_pos = self.find_next_step()
         self.monster_x, self.monster_y = next_pos
-
         self.draw_maze()
 
         if self.monster_x == self.player_x and self.monster_y == self.player_y:
