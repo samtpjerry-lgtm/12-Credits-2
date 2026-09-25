@@ -2,8 +2,6 @@ import tkinter as tk
 import random
 
 
-# Gives the game a title and sets the colour and dimensions of the game
-
 class QuizGame:
     def __init__(self, root):
         self.root = root
@@ -25,23 +23,20 @@ class QuizGame:
         self.question_number = 0
 
         # ====================================================
-        # MAZE VARIABLES
+        # MAZE VARIABLES  (Step 1)
         # ====================================================
 
-        self.maze = [
-            "##########",
-            "#        #",
-            "# ###### #",
-            "# #      #",
-            "# # #### #",
-            "# #      #",
-            "# ###### #",
-            "#        #",
-            "##########"
-        ]
-
+        self.maze_level = 0
+        self.canvas_size = 600
+        self.cell_size = 30
+        self.maze_width = 20
+        self.maze_height = 20
         self.player_x = 1
         self.player_y = 1
+        self.exit_x = self.maze_width - 2
+        self.exit_y = self.maze_height - 2
+        self.maze = None
+        self.canvas = None
 
         # ====================================================
         # QUESTIONS
@@ -333,6 +328,7 @@ class QuizGame:
 
         self.score = 0
         self.question_number = 0
+        self.maze_level = 0
 
         self.show_quiz()
 
