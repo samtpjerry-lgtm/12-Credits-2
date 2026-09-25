@@ -288,7 +288,7 @@ class QuizGame:
         self.show_quiz()
 
     # ========================================================
-    # MAZE GENERATION
+    # MAZE GENERATION (with multiple paths)
     # ========================================================
 
     def generate_maze(self):
@@ -305,9 +305,20 @@ class QuizGame:
                     carve(nx, ny)
 
         carve(1, 1)
+
+        # Make sure exit is open
         maze[self.exit_y][self.exit_x] = 0
         maze[self.exit_y - 1][self.exit_x] = 0
         maze[self.exit_y][self.exit_x - 1] = 0
+
+        # Add extra paths so there are multiple routes
+        extra_paths = 18
+        for _ in range(extra_paths):
+            x = random.randint(1, self.maze_width - 2)
+            y = random.randint(1, self.maze_height - 2)
+            if maze[y][x] == 1:
+                maze[y][x] = 0
+
         return maze
 
     # ========================================================
@@ -441,11 +452,10 @@ class QuizGame:
                     came_from[(nx, ny)] = current
                     queue.append((nx, ny))
 
-        # Reconstruct path
         if goal not in came_from:
-            return start  # no path found
+            return start
 
-        # Walk back from goal to find the first step
+        # Reconstruct path and return the next step
         path = []
         current = goal
         while current != start:
@@ -455,7 +465,7 @@ class QuizGame:
                 break
 
         if path:
-            return path[-1]  # the next step from monster
+            return path[-1]
         return start
 
     def schedule_monster(self):
