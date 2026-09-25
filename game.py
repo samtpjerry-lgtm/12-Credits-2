@@ -492,6 +492,10 @@ class QuizGame:
         # Draw the maze
         self.draw_maze()
 
+        # Enable keyboard controls
+        self.root.bind("<KeyPress>", self.move_player)
+        self.root.focus_set()
+
     # ========================================================
     # MOVE PLAYER  (Step 5)
     # ========================================================
@@ -528,6 +532,43 @@ class QuizGame:
         self.player_x = new_x
         self.player_y = new_y
         self.draw_maze()
+
+        # Check if player reached the exit
+        if self.player_x == self.exit_x and self.player_y == self.exit_y:
+            self.escape_maze()
+
+    # ========================================================
+    # ESCAPE MAZE  (Step 6)
+    # ========================================================
+
+    def escape_maze(self):
+        # Unbind keys so they stop working
+        self.root.unbind("<KeyPress>")
+
+        # Clear the screen
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        label = tk.Label(
+            self.root,
+            text="✓ MAZE ESCAPED!",
+            font=("Courier New", 38, "bold"),
+            fg="#00ff66",
+            bg="#111111"
+        )
+        label.pack(pady=100)
+
+        text = tk.Label(
+            self.root,
+            text="You found the exit!\n\nBack to the quiz...",
+            font=("Courier New", 18),
+            fg="white",
+            bg="#111111"
+        )
+        text.pack()
+
+        # Return to the quiz after a short delay
+        self.root.after(1500, self.show_quiz)
 
 
 # ============================================================
