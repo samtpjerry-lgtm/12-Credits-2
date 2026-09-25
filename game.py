@@ -1,5 +1,7 @@
 import tkinter as tk
 import random
+import winsound
+import threading
 
 
 class QuizGame:
@@ -174,6 +176,38 @@ class QuizGame:
         self.show_quiz()
 
     # ========================================================
+    # SOUND EFFECTS
+    # ========================================================
+
+    def play_sound(self, frequency, duration):
+        """Play a tone in a separate thread so the game doesn't freeze"""
+        def _play():
+            try:
+                winsound.Beep(frequency, duration)
+            except:
+                pass  # Ignore if sound fails
+
+        threading.Thread(target=_play, daemon=True).start()
+
+    def sound_wrong(self):
+        # Deep, ominous failure sound
+        self.play_sound(180, 400)
+        self.root.after(450, lambda: self.play_sound(120, 600))
+
+    def sound_maze_enter(self):
+        # Low drone when entering the labyrinth
+        self.play_sound(100, 700)
+
+    def sound_escape(self):
+        # Slightly higher, relief tone
+        self.play_sound(280, 300)
+        self.root.after(320, lambda: self.play_sound(360, 400))
+
+    def sound_correct(self):
+        # Subtle, dark positive tone
+        self.play_sound(320, 180)
+
+    # ========================================================
     # SHOW QUIZ
     # ========================================================
 
@@ -241,6 +275,7 @@ class QuizGame:
         question = self.questions[self.question_number]
 
         if selected_answer == question["correct"]:
+            self.sound_correct()
             self.score += 1
             self.question_number += 1
 
@@ -249,6 +284,7 @@ class QuizGame:
             else:
                 self.show_results()
         else:
+            self.sound_wrong()
             self.show_wrong()
 
     # ========================================================
@@ -405,7 +441,6 @@ class QuizGame:
                 y2 = y1 + self.cell_size
 
                 if self.maze[y][x] == 1:
-                    # Dark blood-tinged walls
                     self.canvas.create_rectangle(
                         x1, y1, x2, y2,
                         fill="#1a0505",
@@ -417,14 +452,13 @@ class QuizGame:
                         outline=""
                     )
                 else:
-                    # Almost pure black floor
                     self.canvas.create_rectangle(
                         x1, y1, x2, y2,
                         fill="#080000",
                         outline="#0c0000"
                     )
 
-        # Sinister exit
+        # Exit
         ex = self.exit_x * self.cell_size
         ey = self.exit_y * self.cell_size
 
@@ -442,7 +476,7 @@ class QuizGame:
             outline=""
         )
 
-        # Player – glowing entity
+        # Player
         px = self.player_x * self.cell_size
         py = self.player_y * self.cell_size
 
@@ -454,7 +488,7 @@ class QuizGame:
             width=2
         )
 
-        # Glowing eyes
+        # Eyes
         self.canvas.create_rectangle(
             px + 9, py + 9, px + 13, py + 13,
             fill="#ff5555", outline=""
@@ -471,6 +505,8 @@ class QuizGame:
     def start_maze(self):
         for widget in self.root.winfo_children():
             widget.destroy()
+
+        self.sound_maze_enter()
 
         self.maze_level += 1
         self.player_x = 1
@@ -552,6 +588,7 @@ class QuizGame:
 
     def escape_maze(self):
         self.root.unbind("<KeyPress>")
+        self.sound_escape()
 
         for widget in self.root.winfo_children():
             widget.destroy()
