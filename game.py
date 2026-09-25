@@ -371,6 +371,80 @@ class QuizGame:
 
         return maze
 
+    # ========================================================
+    # DRAW MAZE  (Step 3)
+    # ========================================================
+
+    def draw_maze(self):
+        self.canvas.delete("all")
+
+        for y in range(self.maze_height):
+            for x in range(self.maze_width):
+                x1 = x * self.cell_size
+                y1 = y * self.cell_size
+                x2 = x1 + self.cell_size
+                y2 = y1 + self.cell_size
+
+                if self.maze[y][x] == 1:
+                    # Wall
+                    self.canvas.create_rectangle(
+                        x1, y1, x2, y2,
+                        fill="#252525",
+                        outline="#444444"
+                    )
+                    self.canvas.create_rectangle(
+                        x1 + 4, y1 + 4, x2 - 4, y2 - 4,
+                        fill="#171717",
+                        outline=""
+                    )
+                else:
+                    # Floor
+                    self.canvas.create_rectangle(
+                        x1, y1, x2, y2,
+                        fill="#080808",
+                        outline="#111111"
+                    )
+
+        # Green exit
+        ex = self.exit_x * self.cell_size
+        ey = self.exit_y * self.cell_size
+
+        self.canvas.create_rectangle(
+            ex + 4, ey + 4,
+            ex + self.cell_size - 4, ey + self.cell_size - 4,
+            fill="#00ff66",
+            outline="#00ffaa",
+            width=2
+        )
+        self.canvas.create_rectangle(
+            ex + 10, ey + 10,
+            ex + 20, ey + 20,
+            fill="#003300",
+            outline=""
+        )
+
+        # Player
+        px = self.player_x * self.cell_size
+        py = self.player_y * self.cell_size
+
+        self.canvas.create_rectangle(
+            px + 5, py + 5,
+            px + self.cell_size - 5, py + self.cell_size - 5,
+            fill="#00aaff",
+            outline="#66ddff",
+            width=2
+        )
+
+        # Eyes
+        self.canvas.create_rectangle(
+            px + 10, py + 9, px + 13, py + 12,
+            fill="white", outline=""
+        )
+        self.canvas.create_rectangle(
+            px + 18, py + 9, px + 21, py + 12,
+            fill="white", outline=""
+        )
+
 
 # ============================================================
 # START GAME
