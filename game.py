@@ -445,6 +445,53 @@ class QuizGame:
             fill="white", outline=""
         )
 
+    # ========================================================
+    # START MAZE  (Step 4)
+    # ========================================================
+
+    def start_maze(self):
+        # Clear the screen
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        self.maze_level += 1
+        self.player_x = 1
+        self.player_y = 1
+        self.maze = self.generate_maze()
+
+        # Title
+        title = tk.Label(
+            self.root,
+            text="☠ PIXEL MAZE ☠",
+            font=("Courier New", 28, "bold"),
+            fg="#ff3333",
+            bg="#111111"
+        )
+        title.pack(pady=10)
+
+        # Instructions
+        instructions = tk.Label(
+            self.root,
+            text="Use W A S D or ARROW KEYS to move • Find the green exit",
+            font=("Courier New", 12),
+            fg="white",
+            bg="#111111"
+        )
+        instructions.pack(pady=5)
+
+        # Canvas
+        self.canvas = tk.Canvas(
+            self.root,
+            width=self.canvas_size,
+            height=self.canvas_size,
+            bg="black",
+            highlightthickness=0
+        )
+        self.canvas.pack(pady=10)
+
+        # Draw the maze
+        self.draw_maze()
+
 
 # ============================================================
 # START GAME
