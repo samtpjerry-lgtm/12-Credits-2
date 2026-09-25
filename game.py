@@ -10,9 +10,9 @@ class QuizGame:
         # WINDOW SETTINGS
         # ====================================================
 
-        self.root.title("Quiz Game")
+        self.root.title("The Quiz That Should Not Be")
         self.root.geometry("900x700")
-        self.root.configure(bg="#111111")
+        self.root.configure(bg="#050505")
         self.root.resizable(False, False)
 
         # ====================================================
@@ -185,33 +185,33 @@ class QuizGame:
 
         title = tk.Label(
             self.root,
-            text="⚡ QUIZ GAME ⚡",
-            font=("Courier New", 32, "bold"),
-            fg="#00ffff",
-            bg="#111111"
+            text="☠ THE QUIZ THAT SHOULD NOT BE ☠",
+            font=("Courier New", 26, "bold"),
+            fg="#8b0000",
+            bg="#050505"
         )
         title.pack(pady=25)
 
         status = tk.Label(
             self.root,
             text=f"Question {self.question_number + 1}/{len(self.questions)}"
-                 f"     Score: {self.score}",
-            font=("Courier New", 15),
-            fg="white",
-            bg="#111111"
+                 f"     Souls: {self.score}",
+            font=("Courier New", 14),
+            fg="#aa4444",
+            bg="#050505"
         )
         status.pack()
 
         question_label = tk.Label(
             self.root,
             text=question["question"],
-            font=("Courier New", 19, "bold"),
-            fg="white",
-            bg="#111111",
+            font=("Courier New", 18, "bold"),
+            fg="#cccccc",
+            bg="#050505",
             wraplength=780,
             justify="center"
         )
-        question_label.pack(pady=50)
+        question_label.pack(pady=45)
 
         answers = question["answers"].copy()
         random.shuffle(answers)
@@ -220,16 +220,18 @@ class QuizGame:
             button = tk.Button(
                 self.root,
                 text=answer,
-                font=("Courier New", 16, "bold"),
-                fg="white",
-                bg="#222222",
-                activebackground="#00ffff",
-                activeforeground="black",
-                width=25,
+                font=("Courier New", 15, "bold"),
+                fg="#dddddd",
+                bg="#1a0000",
+                activebackground="#5c0000",
+                activeforeground="#ffaaaa",
+                width=28,
                 height=2,
+                relief="flat",
+                bd=0,
                 command=lambda selected=answer: self.check_answer(selected)
             )
-            button.pack(pady=8)
+            button.pack(pady=7)
 
     # ========================================================
     # CHECK ANSWER
@@ -259,32 +261,32 @@ class QuizGame:
 
         label = tk.Label(
             self.root,
-            text="✗ WRONG!",
-            font=("Courier New", 40, "bold"),
-            fg="#ff2222",
-            bg="#111111"
+            text="✗ YOU HAVE FAILED ✗",
+            font=("Courier New", 36, "bold"),
+            fg="#ff0000",
+            bg="#050505"
         )
-        label.pack(pady=60)
+        label.pack(pady=50)
 
         message = tk.Label(
             self.root,
-            text="THE MAZE HAS CLAIMED YOU...",
-            font=("Courier New", 20, "bold"),
-            fg="#ff5555",
-            bg="#111111"
+            text="THE LABYRINTH CLAIMS ANOTHER...",
+            font=("Courier New", 18, "bold"),
+            fg="#aa2222",
+            bg="#050505"
         )
         message.pack()
 
         message2 = tk.Label(
             self.root,
-            text="Escape the maze to continue the quiz!",
-            font=("Courier New", 16),
-            fg="white",
-            bg="#111111"
+            text="Escape... if you can.",
+            font=("Courier New", 15),
+            fg="#666666",
+            bg="#050505"
         )
-        message2.pack(pady=20)
+        message2.pack(pady=25)
 
-        self.root.after(1500, self.start_maze)
+        self.root.after(1800, self.start_maze)
 
     # ========================================================
     # SHOW RESULTS
@@ -296,46 +298,48 @@ class QuizGame:
 
         title = tk.Label(
             self.root,
-            text="⚡ QUIZ COMPLETE ⚡",
-            font=("Courier New", 32, "bold"),
-            fg="#00ffff",
-            bg="#111111"
+            text="☠ THE QUIZ IS OVER ☠",
+            font=("Courier New", 30, "bold"),
+            fg="#8b0000",
+            bg="#050505"
         )
-        title.pack(pady=80)
+        title.pack(pady=70)
 
         score_label = tk.Label(
             self.root,
-            text=f"You scored {self.score}/{len(self.questions)}",
-            font=("Courier New", 24, "bold"),
-            fg="white",
-            bg="#111111"
+            text=f"Souls collected: {self.score}/{len(self.questions)}",
+            font=("Courier New", 22, "bold"),
+            fg="#cccccc",
+            bg="#050505"
         )
         score_label.pack(pady=20)
 
         restart_button = tk.Button(
             self.root,
-            text="PLAY AGAIN",
-            font=("Courier New", 16, "bold"),
-            fg="white",
-            bg="#222222",
-            activebackground="#00ffff",
-            activeforeground="black",
-            width=20,
+            text="TRY AGAIN",
+            font=("Courier New", 15, "bold"),
+            fg="#dddddd",
+            bg="#1a0000",
+            activebackground="#5c0000",
+            activeforeground="#ffaaaa",
+            width=18,
             height=2,
+            relief="flat",
             command=self.restart_game
         )
-        restart_button.pack(pady=30)
+        restart_button.pack(pady=25)
 
         quit_button = tk.Button(
             self.root,
-            text="QUIT",
-            font=("Courier New", 16, "bold"),
-            fg="white",
-            bg="#222222",
-            activebackground="#00ffff",
-            activeforeground="black",
-            width=20,
+            text="LEAVE THIS PLACE",
+            font=("Courier New", 15, "bold"),
+            fg="#dddddd",
+            bg="#1a0000",
+            activebackground="#5c0000",
+            activeforeground="#ffaaaa",
+            width=18,
             height=2,
+            relief="flat",
             command=self.root.destroy
         )
         quit_button.pack(pady=10)
@@ -380,7 +384,6 @@ class QuizGame:
 
         carve(1, 1)
 
-        # Make sure exit is open
         maze[self.exit_y][self.exit_x] = 0
         maze[self.exit_y - 1][self.exit_x] = 0
         maze[self.exit_y][self.exit_x - 1] = 0
@@ -402,63 +405,63 @@ class QuizGame:
                 y2 = y1 + self.cell_size
 
                 if self.maze[y][x] == 1:
-                    # Wall
+                    # Dark blood-tinged walls
                     self.canvas.create_rectangle(
                         x1, y1, x2, y2,
-                        fill="#252525",
-                        outline="#444444"
+                        fill="#1a0505",
+                        outline="#2a0a0a"
                     )
                     self.canvas.create_rectangle(
                         x1 + 4, y1 + 4, x2 - 4, y2 - 4,
-                        fill="#171717",
+                        fill="#0f0303",
                         outline=""
                     )
                 else:
-                    # Floor
+                    # Almost pure black floor
                     self.canvas.create_rectangle(
                         x1, y1, x2, y2,
-                        fill="#080808",
-                        outline="#111111"
+                        fill="#080000",
+                        outline="#0c0000"
                     )
 
-        # Green exit
+        # Sinister exit
         ex = self.exit_x * self.cell_size
         ey = self.exit_y * self.cell_size
 
         self.canvas.create_rectangle(
-            ex + 4, ey + 4,
-            ex + self.cell_size - 4, ey + self.cell_size - 4,
-            fill="#00ff66",
-            outline="#00ffaa",
+            ex + 3, ey + 3,
+            ex + self.cell_size - 3, ey + self.cell_size - 3,
+            fill="#003300",
+            outline="#00aa44",
             width=2
         )
         self.canvas.create_rectangle(
-            ex + 10, ey + 10,
-            ex + 20, ey + 20,
-            fill="#003300",
+            ex + 9, ey + 9,
+            ex + 21, ey + 21,
+            fill="#001a00",
             outline=""
         )
 
-        # Player
+        # Player – glowing entity
         px = self.player_x * self.cell_size
         py = self.player_y * self.cell_size
 
         self.canvas.create_rectangle(
             px + 5, py + 5,
             px + self.cell_size - 5, py + self.cell_size - 5,
-            fill="#00aaff",
-            outline="#66ddff",
+            fill="#440000",
+            outline="#ff2222",
             width=2
         )
 
-        # Eyes
+        # Glowing eyes
         self.canvas.create_rectangle(
-            px + 10, py + 9, px + 13, py + 12,
-            fill="white", outline=""
+            px + 9, py + 9, px + 13, py + 13,
+            fill="#ff5555", outline=""
         )
         self.canvas.create_rectangle(
-            px + 18, py + 9, px + 21, py + 12,
-            fill="white", outline=""
+            px + 17, py + 9, px + 21, py + 13,
+            fill="#ff5555", outline=""
         )
 
     # ========================================================
@@ -476,19 +479,19 @@ class QuizGame:
 
         title = tk.Label(
             self.root,
-            text="☠ PIXEL MAZE ☠",
-            font=("Courier New", 28, "bold"),
-            fg="#ff3333",
-            bg="#111111"
+            text="☠ THE LABYRINTH ☠",
+            font=("Courier New", 26, "bold"),
+            fg="#8b0000",
+            bg="#050505"
         )
         title.pack(pady=10)
 
         instructions = tk.Label(
             self.root,
-            text="Use W A S D or ARROW KEYS to move • Find the green exit",
+            text="W A S D or ARROWS • Find the only way out",
             font=("Courier New", 12),
-            fg="white",
-            bg="#111111"
+            fg="#666666",
+            bg="#050505"
         )
         instructions.pack(pady=5)
 
@@ -496,7 +499,7 @@ class QuizGame:
             self.root,
             width=self.canvas_size,
             height=self.canvas_size,
-            bg="black",
+            bg="#000000",
             highlightthickness=0
         )
         self.canvas.pack(pady=10)
@@ -555,23 +558,23 @@ class QuizGame:
 
         label = tk.Label(
             self.root,
-            text="✓ MAZE ESCAPED!",
-            font=("Courier New", 38, "bold"),
-            fg="#00ff66",
-            bg="#111111"
+            text="YOU ESCAPED... FOR NOW",
+            font=("Courier New", 28, "bold"),
+            fg="#00aa44",
+            bg="#050505"
         )
         label.pack(pady=80)
 
         text = tk.Label(
             self.root,
-            text="You found the exit!\n\nReturning to the quiz...",
-            font=("Courier New", 18),
-            fg="white",
-            bg="#111111"
+            text="The labyrinth releases its grip.\n\nBack to the questions...",
+            font=("Courier New", 16),
+            fg="#888888",
+            bg="#050505"
         )
         text.pack(pady=20)
 
-        self.root.after(1600, self.show_quiz)
+        self.root.after(1800, self.show_quiz)
 
 
 # ============================================================
