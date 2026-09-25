@@ -23,7 +23,7 @@ class QuizGame:
         self.question_number = 0
 
         # ====================================================
-        # MAZE VARIABLES  (Step 1)
+        # MAZE VARIABLES
         # ====================================================
 
         self.maze_level = 0
@@ -171,7 +171,6 @@ class QuizGame:
             }
         ]
 
-        # Show the first question
         self.show_quiz()
 
     # ========================================================
@@ -179,15 +178,11 @@ class QuizGame:
     # ========================================================
 
     def show_quiz(self):
-
-        # Clear anything currently on the screen
         for widget in self.root.winfo_children():
             widget.destroy()
 
-        # Get the current question
         question = self.questions[self.question_number]
 
-        # Game title
         title = tk.Label(
             self.root,
             text="⚡ QUIZ GAME ⚡",
@@ -197,7 +192,6 @@ class QuizGame:
         )
         title.pack(pady=25)
 
-        # Question number and score
         status = tk.Label(
             self.root,
             text=f"Question {self.question_number + 1}/{len(self.questions)}"
@@ -208,7 +202,6 @@ class QuizGame:
         )
         status.pack()
 
-        # Question
         question_label = tk.Label(
             self.root,
             text=question["question"],
@@ -219,10 +212,6 @@ class QuizGame:
             justify="center"
         )
         question_label.pack(pady=50)
-
-        # ====================================================
-        # ANSWER BUTTONS
-        # ====================================================
 
         answers = question["answers"].copy()
         random.shuffle(answers)
@@ -247,7 +236,6 @@ class QuizGame:
     # ========================================================
 
     def check_answer(self, selected_answer):
-
         question = self.questions[self.question_number]
 
         if selected_answer == question["correct"]:
@@ -259,7 +247,6 @@ class QuizGame:
             else:
                 self.show_results()
         else:
-            # Wrong answer → send player into the maze
             self.show_wrong()
 
     # ========================================================
@@ -304,12 +291,9 @@ class QuizGame:
     # ========================================================
 
     def show_results(self):
-
-        # Clear anything currently on the screen
         for widget in self.root.winfo_children():
             widget.destroy()
 
-        # Results title
         title = tk.Label(
             self.root,
             text="⚡ QUIZ COMPLETE ⚡",
@@ -319,7 +303,6 @@ class QuizGame:
         )
         title.pack(pady=80)
 
-        # Score
         score_label = tk.Label(
             self.root,
             text=f"You scored {self.score}/{len(self.questions)}",
@@ -329,7 +312,6 @@ class QuizGame:
         )
         score_label.pack(pady=20)
 
-        # Restart button
         restart_button = tk.Button(
             self.root,
             text="PLAY AGAIN",
@@ -344,7 +326,6 @@ class QuizGame:
         )
         restart_button.pack(pady=30)
 
-        # Quit button
         quit_button = tk.Button(
             self.root,
             text="QUIT",
@@ -364,11 +345,9 @@ class QuizGame:
     # ========================================================
 
     def restart_game(self):
-
         self.score = 0
         self.question_number = 0
         self.maze_level = 0
-
         self.show_quiz()
 
     # ========================================================
@@ -376,13 +355,11 @@ class QuizGame:
     # ========================================================
 
     def generate_maze(self):
-        # Start with all walls
         maze = [
             [1 for _ in range(self.maze_width)]
             for _ in range(self.maze_height)
         ]
 
-        # Recursive backtracking to carve paths
         def carve(x, y):
             maze[y][x] = 0
 
@@ -403,7 +380,7 @@ class QuizGame:
 
         carve(1, 1)
 
-        # Make sure the exit area is open
+        # Make sure exit is open
         maze[self.exit_y][self.exit_x] = 0
         maze[self.exit_y - 1][self.exit_x] = 0
         maze[self.exit_y][self.exit_x - 1] = 0
@@ -489,7 +466,6 @@ class QuizGame:
     # ========================================================
 
     def start_maze(self):
-        # Clear the screen
         for widget in self.root.winfo_children():
             widget.destroy()
 
@@ -498,7 +474,6 @@ class QuizGame:
         self.player_y = 1
         self.maze = self.generate_maze()
 
-        # Title
         title = tk.Label(
             self.root,
             text="☠ PIXEL MAZE ☠",
@@ -508,7 +483,6 @@ class QuizGame:
         )
         title.pack(pady=10)
 
-        # Instructions
         instructions = tk.Label(
             self.root,
             text="Use W A S D or ARROW KEYS to move • Find the green exit",
@@ -518,7 +492,6 @@ class QuizGame:
         )
         instructions.pack(pady=5)
 
-        # Canvas
         self.canvas = tk.Canvas(
             self.root,
             width=self.canvas_size,
@@ -528,10 +501,8 @@ class QuizGame:
         )
         self.canvas.pack(pady=10)
 
-        # Draw the maze
         self.draw_maze()
 
-        # Enable keyboard controls
         self.root.bind("<KeyPress>", self.move_player)
         self.root.focus_set()
 
@@ -559,32 +530,26 @@ class QuizGame:
         new_x = self.player_x + dx
         new_y = self.player_y + dy
 
-        # Stay inside the maze
         if not (0 <= new_x < self.maze_width and 0 <= new_y < self.maze_height):
             return
 
-        # Hit a wall?
         if self.maze[new_y][new_x] == 1:
             return
 
-        # Move the player
         self.player_x = new_x
         self.player_y = new_y
         self.draw_maze()
 
-        # Check if player reached the exit
         if self.player_x == self.exit_x and self.player_y == self.exit_y:
             self.escape_maze()
 
     # ========================================================
-    # ESCAPE MAZE  (Polished in Step 8)
+    # ESCAPE MAZE
     # ========================================================
 
     def escape_maze(self):
-        # Unbind keys so they stop working
         self.root.unbind("<KeyPress>")
 
-        # Clear the screen
         for widget in self.root.winfo_children():
             widget.destroy()
 
@@ -606,7 +571,6 @@ class QuizGame:
         )
         text.pack(pady=20)
 
-        # Return to the quiz after a short delay
         self.root.after(1600, self.show_quiz)
 
 
