@@ -243,7 +243,7 @@ class QuizGame:
             button.pack(pady=8)
 
     # ========================================================
-    # CHECK ANSWER  (Updated in Step 7)
+    # CHECK ANSWER
     # ========================================================
 
     def check_answer(self, selected_answer):
@@ -263,7 +263,7 @@ class QuizGame:
             self.show_wrong()
 
     # ========================================================
-    # SHOW WRONG  (Step 7)
+    # SHOW WRONG
     # ========================================================
 
     def show_wrong(self):
@@ -372,7 +372,7 @@ class QuizGame:
         self.show_quiz()
 
     # ========================================================
-    # MAZE GENERATION  (Step 2)
+    # MAZE GENERATION
     # ========================================================
 
     def generate_maze(self):
@@ -411,7 +411,7 @@ class QuizGame:
         return maze
 
     # ========================================================
-    # DRAW MAZE  (Step 3)
+    # DRAW MAZE
     # ========================================================
 
     def draw_maze(self):
@@ -485,7 +485,7 @@ class QuizGame:
         )
 
     # ========================================================
-    # START MAZE  (Step 4)
+    # START MAZE
     # ========================================================
 
     def start_maze(self):
@@ -536,7 +536,7 @@ class QuizGame:
         self.root.focus_set()
 
     # ========================================================
-    # MOVE PLAYER  (Step 5)
+    # MOVE PLAYER
     # ========================================================
 
     def move_player(self, event):
@@ -577,7 +577,7 @@ class QuizGame:
             self.escape_maze()
 
     # ========================================================
-    # ESCAPE MAZE  (Step 6)
+    # ESCAPE MAZE  (Polished in Step 8)
     # ========================================================
 
     def escape_maze(self):
@@ -595,19 +595,19 @@ class QuizGame:
             fg="#00ff66",
             bg="#111111"
         )
-        label.pack(pady=100)
+        label.pack(pady=80)
 
         text = tk.Label(
             self.root,
-            text="You found the exit!\n\nBack to the quiz...",
+            text="You found the exit!\n\nReturning to the quiz...",
             font=("Courier New", 18),
             fg="white",
             bg="#111111"
         )
-        text.pack()
+        text.pack(pady=20)
 
         # Return to the quiz after a short delay
-        self.root.after(1500, self.show_quiz)
+        self.root.after(1600, self.show_quiz)
 
 
 # ============================================================
