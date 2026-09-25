@@ -1,7 +1,9 @@
 import tkinter as tk
 import random
 
-#test commit
+
+# Gives the game a title and sets the colour and dimensions of the game
+
 class QuizGame:
     def __init__(self, root):
         self.root = root
@@ -21,6 +23,25 @@ class QuizGame:
 
         self.score = 0
         self.question_number = 0
+
+        # ====================================================
+        # MAZE VARIABLES
+        # ====================================================
+
+        self.maze = [
+            "##########",
+            "#        #",
+            "# ###### #",
+            "# #      #",
+            "# # #### #",
+            "# #      #",
+            "# ###### #",
+            "#        #",
+            "##########"
+        ]
+
+        self.player_x = 1
+        self.player_y = 1
 
         # ====================================================
         # QUESTIONS
@@ -155,7 +176,7 @@ class QuizGame:
             }
         ]
 
-        # Show first question
+        # Show the first question
         self.show_quiz()
 
     # ========================================================
@@ -164,11 +185,11 @@ class QuizGame:
 
     def show_quiz(self):
 
-        # Clear the screen
+        # Clear anything currently on the screen
         for widget in self.root.winfo_children():
             widget.destroy()
 
-        # Get current question
+        # Get the current question
         question = self.questions[self.question_number]
 
         # Game title
@@ -202,7 +223,7 @@ class QuizGame:
             wraplength=780,
             justify="center"
         )
-        question_label.pack(pady=40)
+        question_label.pack(pady=50)
 
         # ====================================================
         # ANSWER BUTTONS
@@ -234,14 +255,11 @@ class QuizGame:
 
         question = self.questions[self.question_number]
 
-        # Check if answer is correct
         if selected_answer == question["correct"]:
             self.score += 1
 
-        # Move to next question
         self.question_number += 1
 
-        # Show next question or results
         if self.question_number < len(self.questions):
             self.show_quiz()
         else:
@@ -253,7 +271,7 @@ class QuizGame:
 
     def show_results(self):
 
-        # Clear screen
+        # Clear anything currently on the screen
         for widget in self.root.winfo_children():
             widget.destroy()
 
@@ -318,6 +336,7 @@ class QuizGame:
 
         self.show_quiz()
 
+
 # ============================================================
 # START GAME
 # ============================================================
@@ -326,7 +345,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     game = QuizGame(root)
     root.mainloop()
-
-    # ============================================================
-    #Now i need to figure out how to make the maze part
-    # ============================================================
