@@ -94,6 +94,7 @@ class QuizGame:
 
     def sound_wrong(self):
         self.play_sound(180, 400)
+        self.root.after(450, lambda: self.play_sound(120, 600))
 
     def sound_maze_enter(self):
         self.play_sound(100, 700)
@@ -162,8 +163,11 @@ class QuizGame:
                 activeforeground="#ffaaaa",
                 width=28,
                 height=2,
-                relief="flat",
-                bd=0,
+                relief="solid",
+                bd=1,
+                highlightthickness=1,
+                highlightbackground="#ffffff",
+                highlightcolor="#ffffff",
                 command=lambda selected=answer: self.check_answer(selected)
             )
             button.pack(pady=7)
@@ -339,10 +343,10 @@ class QuizGame:
                 y2 = y1 + self.cell_size
 
                 if self.maze[y][x] == 1:
-                    self.canvas.create_rectangle(x1, y1, x2, y2, fill="#1a0505", outline="#2a0a0a")
-                    self.canvas.create_rectangle(x1 + 4, y1 + 4, x2 - 4, y2 - 4, fill="#0f0303", outline="")
+                    self.canvas.create_rectangle(x1, y1, x2, y2, fill="#303030", outline="#555555", width=1)
+                    self.canvas.create_rectangle(x1 + 4, y1 + 4, x2 - 4, y2 - 4, fill="#222222", outline="#383838", width=1)
                 else:
-                    self.canvas.create_rectangle(x1, y1, x2, y2, fill="#080000", outline="#0c0000")
+                    self.canvas.create_rectangle(x1, y1, x2, y2, fill="#121212", outline="#292929", width=1)
 
         # Exit
         ex = self.exit_x * self.cell_size
@@ -411,8 +415,9 @@ class QuizGame:
             self.root,
             width=self.canvas_size,
             height=self.canvas_size,
-            bg="#000000",
-            highlightthickness=0
+            bg="#101010",
+            highlightthickness=1,
+            highlightbackground="#555555"
         )
         self.canvas.pack(pady=10)
 
