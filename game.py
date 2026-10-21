@@ -12,6 +12,7 @@ except ImportError:
 
 
 class QuizGame:
+    
     def __init__(self, root):
         self.root = root
 
@@ -53,26 +54,26 @@ class QuizGame:
         # QUESTIONS
         # ====================================================
         self.questions = [
-            {"question": "What is 2 + 2?", "answers": ["3", "4", "5", "6"], "correct": "4"},
+            {"question": "What is 1 + 1?", "answers": ["1", "2", "3", "4"], "correct": "2"},
             {"question": "What planet do we live on?", "answers": ["Mars", "Earth", "Venus", "Jupiter"], "correct": "Earth"},
             {"question": "How many days are in a week?", "answers": ["5", "6", "7", "8"], "correct": "7"},
-            {"question": "What color do you get by mixing red and blue?", "answers": ["Green", "Orange", "Purple", "Yellow"], "correct": "Purple"},
-            {"question": "What is 10 × 5?", "answers": ["15", "50", "55", "100"], "correct": "50"},
-            {"question": "What is the square root of 144?", "answers": ["10", "11", "12", "14"], "correct": "12"},
-            {"question": "Which element has the chemical symbol 'Au'?", "answers": ["Silver", "Gold", "Aluminium", "Argon"], "correct": "Gold"},
-            {"question": "What is 15% of 200?", "answers": ["20", "25", "30", "35"], "correct": "30"},
-            {"question": "Which country has the largest population?", "answers": ["India", "USA", "Brazil", "Japan"], "correct": "India"},
-            {"question": "What is the binary representation of decimal 10?", "answers": ["1001", "1010", "1100", "1110"], "correct": "1010"},
-            {"question": "If f(x) = x² - 3x + 2, what is f(4)?", "answers": ["4", "5", "6", "8"], "correct": "6"},
-            {"question": "Which scientist formulated the three laws of planetary motion?", "answers": ["Isaac Newton", "Johannes Kepler", "Galileo Galilei", "Albert Einstein"], "correct": "Johannes Kepler"},
-            {"question": "What is the derivative of x³ + 2x² - 5x?", "answers": ["3x² + 4x - 5", "3x² + 2x - 5", "x² + 4x - 5", "3x³ + 4x² - 5"], "correct": "3x² + 4x - 5"},
-            {"question": "Which data structure uses LIFO (Last In, First Out)?", "answers": ["Queue", "Stack", "Tree", "Graph"], "correct": "Stack"},
-            {"question": "What is the time complexity of binary search on a sorted array?", "answers": ["O(n)", "O(n²)", "O(log n)", "O(1)"], "correct": "O(log n)"},
-            {"question": "What is the determinant of [[3, 2], [1, 4]]?", "answers": ["8", "10", "12", "14"], "correct": "10"},
-            {"question": "In special relativity, what remains invariant between inertial reference frames?", "answers": ["Time", "Length", "Spacetime interval", "Kinetic energy"], "correct": "Spacetime interval"},
-            {"question": "Which algorithm has an average-case time complexity of O(n log n)?", "answers": ["Bubble sort", "Insertion sort", "Merge sort", "Linear search"], "correct": "Merge sort"},
-            {"question": "If a fair six-sided die is rolled twice, what is the probability of getting a sum of 7?", "answers": ["1/6", "1/8", "1/12", "1/18"], "correct": "1/6"},
-            {"question": "What is the integral of 2x from x = 0 to x = 3?", "answers": ["6", "9", "12", "18"], "correct": "9"}
+            {"question": "What colour is a ripe banana?", "answers": ["Blue", "Yellow", "Purple", "Red"], "correct": "Yellow"},
+            {"question": "What is 5 + 3?", "answers": ["6", "7", "8", "9"], "correct": "8"},
+            {"question": "Which animal says 'meow'?", "answers": ["Dog", "Cow", "Cat", "Horse"], "correct": "Cat"},
+            {"question": "How many legs does a spider have?", "answers": ["6", "8", "10", "4"], "correct": "8"},
+            {"question": "What is the opposite of hot?", "answers": ["Warm", "Dry", "Cold", "Bright"], "correct": "Cold"},
+            {"question": "What is 10 - 4?", "answers": ["4", "5", "6", "7"], "correct": "6"},
+            {"question": "Which of these is a fruit?", "answers": ["Carrot", "Potato", "Apple", "Lettuce"], "correct": "Apple"},
+            {"question": "How many months are in a year?", "answers": ["10", "11", "12", "13"], "correct": "12"},
+            {"question": "Which animal is known as man's best friend?", "answers": ["Cat", "Dog", "Rabbit", "Sheep"], "correct": "Dog"},
+            {"question": "What is 3 × 3?", "answers": ["6", "7", "8", "9"], "correct": "9"},
+            {"question": "What do bees make?", "answers": ["Milk", "Honey", "Bread", "Juice"], "correct": "Honey"},
+            {"question": "Which shape has three sides?", "answers": ["Square", "Circle", "Triangle", "Rectangle"], "correct": "Triangle"},
+            {"question": "What is the capital city of New Zealand?", "answers": ["Auckland", "Wellington", "Christchurch", "Dunedin"], "correct": "Wellington"},
+            {"question": "What do you use to tell the time?", "answers": ["Clock", "Plate", "Pillow", "Spoon"], "correct": "Clock"},
+            {"question": "Which season comes after summer?", "answers": ["Spring", "Winter", "Autumn", "Summer"], "correct": "Autumn"},
+            {"question": "How many wheels does a bicycle usually have?", "answers": ["1", "2", "3", "4"], "correct": "2"},
+            {"question": "What is 10 ÷ 2?", "answers": ["2", "4", "5", "10"], "correct": "5"}
         ]
 
         self.show_quiz()
@@ -93,7 +94,6 @@ class QuizGame:
 
     def sound_wrong(self):
         self.play_sound(180, 400)
-        self.root.after(450, lambda: self.play_sound(120, 600))
 
     def sound_maze_enter(self):
         self.play_sound(100, 700)
@@ -589,7 +589,6 @@ class QuizGame:
         text.pack(pady=20)
 
         self.root.after(1800, self.show_quiz)
-
 
 # ============================================================
 # START GAME
